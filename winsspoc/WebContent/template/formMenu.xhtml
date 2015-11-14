@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="formmenu">
+		<p:menubar style="width: 100%">
+			<p:menuitem value="Home" url="/" icon="ui-icon-home"
+				style="padding-right: 4px" />
+			<p:submenu label="Cadastros" icon="ui-icon-document">
+				<p:menuitem value="Empresas"  action="#{empresaBean.abrirCadastroEmpresa}"/>
+				<p:menuitem value="Grupos"  action="#{grupoBean.abrirCadastroGrupo}"/>
+				<p:menuitem value="Produtos"  action="#{produtoBean.preparaCadastroProduto}"/>
+			</p:submenu>	
+			<p:menuitem value="Parametros" 
+				icon="ui-icon-bookmark" action="#{parametroBean.preparaCadastroParametro}"/>
+		    <p:menuitem value="Vendas" 
+				ajax="false" icon="ui-icon-bookmark" style="padding-right: 4px" />
+			<p:submenu label="Precificação" icon="ui-icon-bookmark">				
+				<p:menuitem value="por Produtos"  action="#{precificacaoBean.abrirPrecificacao2}"/>
+				<p:menuitem value="por Lista de Produtos"  action="#{precificacaoBean.abrirPrecificacao3}"/>
+			</p:submenu>
+			<p:menuitem value="Relatórios" 
+				icon="ui-icon-bookmark" url="/" style="padding-right: 4px" />
+			<p:menuitem value="Sair" 
+				ajax="false" icon="ui-icon-bookmark" style="padding-right: 4px" />
+		</p:menubar>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Dashboard</title>
+</h:head>
+<ui:composition template="/template/template.xhtml">
+	<ui:define name="content">
+		<h:form id="frmPrecificacao">
+			<h:panelGroup id="display" layout="block">
+				<fieldset>
+					<legend>Produto</legend>
+					<table width="100%" cellpadding="0" cellspacing="10" border="0">
+						<tr>
+							<td>Produto</td>
+							<td><p:selectOneMenu id="produto"
+									value="#{precificacaoBean.produto}" converter="converterPadrao"
+									filter="true">
+									<f:selectItem itemLabel="Selecione um Produto" itemValue="" />
+									<f:selectItems value="#{precificacaoBean.produtoList}"
+										var="varP" itemLabel="#{varP.nome}" itemValue="#{varP}" />
+									<p:ajax event="change" update=":frmPrecificacao"
+										listener="#{precificacaoBean.getSelecionaProduto()}" />
+								</p:selectOneMenu></td>
+						</tr>
+					</table>
+				</fieldset>
+				<div class="ui-grid ui-grid-responsive">
+    				<div class="ui-grid-row">		
+    				  <div class="ui-grid-col-6">		
+							<fieldset>
+								<legend>Informações - Produo</legend>
+								<table width="100%" cellpadding="0" cellspacing="10" border="0">
+									<tr>
+										<td>Custo por Unidade</td>
+										<td><p:inputText id="custoUnidadep" readonly="true"
+												value="#{precificacaoBean.produto.valorCompra}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="2" pattern="#0.00" />
+											</p:inputText></td>
+									</tr>
+									<tr>
+										<td>Estoque</td>
+										<td><p:inputText id="estoquep" readonly="true"
+												value="#{precificacaoBean.produto.quantidadeEstoque}"></p:inputText></td>
+									</tr>
+									<tr>
+										<td>Custo Total por Unidade</td>
+										<td><p:inputText id="custoTotalUnidade" readonly="true"
+												value="#{precificacaoBean.produto.valorCompra*precificacaoBean.produto.quantidadeEstoque}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="2" pattern="#0.00" />
+											</p:inputText></td>
+									</tr>
+									<tr>
+										<td>%</td>
+										<td><p:inputText id="percentagemp" readonly="true"
+												value="#{precificacaoBean.pegaPerCustoProducao()*100}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="2" pattern="#0.00" />
+											</p:inputText></td>
+									</tr>
+									<tr>
+										<td>Custo Fixo</td>
+										<td><p:inputText id="custoFixoProduto" readonly="true"
+												value="#{precificacaoBean.totalCustoFixo()}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="2" pattern="#0.00" />
+											</p:inputText></td>
+									</tr>
+
+									<tr>
+										<td>Rateio Fixo</td>
+										<td><p:inputText id="rateioFixop" readonly="true"
+												value="#{precificacaoBean.totalCustoFixo()*precificacaoBean.pegaPerCustoProducao()}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="2" pattern="#0.00" />
+											</p:inputText></td>
+									</tr>
+									<tr>
+										<td>Total dos Custo de Produção</td>
+										<td><p:inputText id="custoTotalp" readonly="true"
+												value="#{(precificacaoBean.produto.valorVenda * precificacaoBean.produto.quantidadeEstoque)}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="2" pattern="#0.00" />
+											</p:inputText></td>
+									</tr>
+									<tr>
+										<td>Total Geral Custos</td>
+										<td><p:inputText id="custoGeralTotalp" readonly="true"
+												value="#{(precificacaoBean.produto.valorVenda * precificacaoBean.produto.quantidadeEstoque)+precificacaoBean.totalCustoFixo()}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="2" pattern="#0.00" />
+											</p:inputText></td>
+									</tr>
+
+								</table>
+							</fieldset>
+						</div>
+						<div class="ui-grid-col-6">
+							<fieldset>
+								<legend>Mark-up</legend>
+								<table width="100%" cellpadding="0" cellspacing="10" border="0">
+									<tr>
+										<td>Mark-up</td>
+									</tr>
+									<tr>
+										<td>Preço de Venda (em %)</td>
+										<td><p:inputText id="precoVenda"
+												value="#{precificacaoBean.precoVenda}"
+												rendered="#{precificacaoBean.produto!=null}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="2" pattern="#0.00" />
+												<p:ajax event="change" update=":frmPrecificacao" />
+											</p:inputText></td>
+									</tr>
+									<tr>
+										<td>Lucro Esperado (em %)</td>
+										<td><p:inputText id="lucroEsperado"
+												value="#{precificacaoBean.lucroEsperado}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="2" pattern="#0.00" />
+												<p:ajax event="change" update=":frmPrecificacao" />
+											</p:inputText></td>
+									</tr>
+									<tr>
+										<td>Tributação sobre vendas (em %)</td>
+										<td><p:inputText id="tributacaoVenda"
+												value="#{precificacaoBean.tributacaoTeste}"
+												rendered="#{precificacaoBean.produto!=null}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="2" pattern="#0.00" />
+											</p:inputText></td>
+									</tr>
+									<tr>
+										<td>Comissões (em %)</td>
+										<td><p:inputText id="comissoes"
+												value="#{precificacaoBean.comissaoTeste}"
+												rendered="#{precificacaoBean.produto!=null}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="2" pattern="#0.00" />
+											</p:inputText></td>
+									</tr>
+									<tr>
+										<td>Custo Fixo (em %)</td>
+										<td><p:inputText id="custoFixoMarkup"
+												value="#{precificacaoBean.custoFixoPorVenda}"
+												rendered="#{precificacaoBean.produto!=null}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="2" pattern="#0.00" />
+											</p:inputText></td>
+									</tr>
+									<tr>
+										<td>Taxa Mark-up (em %)</td>
+										<td><p:inputText id="taxaMarkup"
+												value="#{precificacaoBean.taxaMarkup}"
+												rendered="#{precificacaoBean.produto!=null}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="2" pattern="#0.00" />
+											</p:inputText></td>
+									</tr>
+									<tr>
+										<td>Taxa Mark-up Multiplicador</td>
+										<td><p:inputText id="taxaMarkupMultiplicador"
+												value="#{precificacaoBean.taxaMarkupMultiplicador}"
+												rendered="#{precificacaoBean.produto!=null}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="2" pattern="#0.00" />
+											</p:inputText></td>
+									</tr>
+
+									<tr>
+										<td>Preço Venda Mark-up</td>
+										<td><p:inputText id="precoVendaMarkup"
+												value="#{precificacaoBean.precoVendaMarkup}"
+												rendered="#{precificacaoBean.produto!=null}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="2" pattern="#0.00" />
+											</p:inputText></td>
+									</tr>
+									<tr>
+										<td>Margem de Contríbuição</td>
+										<td><p:inputText id="margemContribuicao"
+												value="#{precificacaoBean.margemContribuicao}"
+												rendered="#{precificacaoBean.produto!=null}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="2" pattern="#0.00" />
+											</p:inputText></td>
+									</tr>
+									<tr>
+										<td>Ponto de Equilibrio (em Unidades)</td>
+										<td><p:inputText id="quantidadeEquilibrio"
+												value="#{precificacaoBean.quantidadeEquilibrio}"
+												rendered="#{precificacaoBean.produto!=null}">
+												<f:convertNumber type="number" groupingUsed="true"
+													minFractionDigits="0" pattern="#########" />
+											</p:inputText></td>
+									</tr>
+
+								</table>
+							</fieldset>
+							</div>
+							</div>
+							</div>
+							
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

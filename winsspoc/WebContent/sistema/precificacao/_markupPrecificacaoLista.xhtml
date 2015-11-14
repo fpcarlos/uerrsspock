@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/template.xhtml">
+	<ui:define name="content">
+		<h:form id="frmPrecificacaoLista">
+			<h:panelGroup id="display" layout="block">
+				<p:dataTable id="listaProdutos"
+					value="#{precificacaoBean.produtoList}" var="s"
+					emptyMessage="Nenhuma Produto Encontrado" rows="10"
+					paginator="true" paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="({currentPage} de {totalPages})"
+					sortBy="#{s.id}">
+					<p:column headerText="Código">
+						<h:outputText value="#{s.id}" />
+					</p:column>
+					<p:column headerText="Produto">
+						<h:outputText value="#{s.nome}" />
+					</p:column>
+					<p:column headerText="Qtd Estoque">
+						<h:outputText value="#{s.quantidadeEstoque}" />
+					</p:column>
+					<p:column headerText="Custo Compra">
+						<h:outputText value="#{s.valorCompra}">
+							<f:convertNumber type="number" groupingUsed="true"
+								minFractionDigits="2" pattern="#0.00" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Total Custo Compra">
+						<h:outputText value="#{s.valorCompra*s.quantidadeEstoque}">
+							<f:convertNumber type="number" groupingUsed="true"
+								minFractionDigits="2" pattern="#0.00" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Custo Venda">
+						<h:outputText value="#{s.valorVenda}">
+							<f:convertNumber type="number" groupingUsed="true"
+								minFractionDigits="2" pattern="#0.00" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Total Custo Venda">
+						<h:outputText value="#{s.valorVenda*s.quantidadeEstoque}">
+							<f:convertNumber type="number" groupingUsed="true"
+								minFractionDigits="2" pattern="#0.00" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Custo Fixo">
+						<h:outputText value="#{precificacaoBean.totalCustoFixo()}">
+							<f:convertNumber type="number" groupingUsed="true"
+								minFractionDigits="2" pattern="#0.00" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Percentual Custos">
+						<h:outputText value="#{precificacaoBean.pegaPerCusto(s.id) * 100}">
+							<f:convertNumber type="number" groupingUsed="true"
+								minFractionDigits="2" pattern="#0.00" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Rateio Custo Fixo">
+						<h:outputText value="#{precificacaoBean.totalCustoFixo()*precificacaoBean.pegaPerCusto(s.id)}">
+							<f:convertNumber type="number" groupingUsed="true"
+								minFractionDigits="2" pattern="#0.00" />
+						</h:outputText>
+					</p:column>
+					
+					
+				</p:dataTable>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
